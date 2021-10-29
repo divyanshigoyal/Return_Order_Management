@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class DefectiveComponentDetail
+    public class DefectiveComponentDetail : BaseEntity
     {
-        public int Id {get; set;}
         public string ComponentType { get; set; }
         public string ComponentName { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         
     }
 }

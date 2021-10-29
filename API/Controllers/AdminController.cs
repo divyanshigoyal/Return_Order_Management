@@ -6,6 +6,7 @@ using Infrastructure.Data;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Core.Interfaces;
 
 namespace API.Controllers
 {
@@ -13,21 +14,21 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
-        private readonly RomDbContext _context;
-        public AdminController(RomDbContext context)
+        private readonly IProcessRequestRepository _repo;
+        public AdminController(IProcessRequestRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProcessRequest>>> GetAllProcessRequests(){
-            var processRequests = await _context.ProcessRequests.ToListAsync();
-            return processRequests;
+            var processRequests = await _repo.GetProcessRequestsAsync();
+            return Ok(processRequests);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProcessRequest>> GetProcessRequest(int id){
-            var processRequest = await _context.ProcessRequests.FindAsync(id);
+            var processRequest = await _repo.GetProcessRequestByIdAsync(id);
             return processRequest;
         }
     }

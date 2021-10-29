@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +24,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddScoped<IProcessRequestRepository, ProcessRequestReporsitory>();
             services.AddControllers();
             services.AddDbContext<RomDbContext>(x => 
                 x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
