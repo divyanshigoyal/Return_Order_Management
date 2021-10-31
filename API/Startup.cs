@@ -6,6 +6,7 @@ using API.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace API
         {
 
             services.AddScoped<IProcessRequestRepository, ProcessRequestReporsitory>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddControllers();
             services.AddAutoMapper(typeof(MappingProfiles));
@@ -55,7 +57,7 @@ namespace API
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
-            services.AddIdentityServices();
+            services.AddIdentityServices(_configuration);
             services.AddAuthentication();
             services.AddSwaggerGen(c =>
             {
@@ -79,6 +81,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Errors;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -14,6 +15,11 @@ namespace API.Controllers
         public BuggyController(RomDbContext context)
         {
             _context = context;
+        }
+        [HttpGet("testAuth")]
+        [Authorize]
+        public ActionResult<string> GetSecretText(){
+            return "Secret key here maybe??";
         }
 
         [HttpGet("notfound")]
