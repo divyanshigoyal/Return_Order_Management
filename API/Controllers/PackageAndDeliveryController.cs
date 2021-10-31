@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PackageAndDeliveryController : ControllerBase
+    public class PackageAndDeliveryController : BaseApiController
     {
         private readonly IProcessRequestRepository _repo;
         public PackageAndDeliveryController(IProcessRequestRepository repo)

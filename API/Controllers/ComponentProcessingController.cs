@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ComponentProcessingController : ControllerBase
+    public class ComponentProcessingController : BaseApiController
     {
         private readonly IProcessRequestRepository _repo;
         public ComponentProcessingController(IProcessRequestRepository repo)

@@ -10,12 +10,12 @@ using Core.Interfaces;
 using Core.Specifications;
 using API.DTOs;
 using AutoMapper;
+using API.Errors;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AdminController : ControllerBase
+    public class AdminController : BaseApiController
     {
         private readonly IGenericRepository<ProcessRequest> _requestRepo;
         private readonly IGenericRepository<ProcessResponse> _responseRepo;
@@ -37,9 +37,12 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse) ,StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProcessRequestToReturnDto>> GetProcessRequest(int id){
             var spec = new ProcessRequestWithDefectiveComponentDetail(id);
             var processRequest = await _requestRepo.GetEntityWithSpec(spec);
+            if(processRequest == null) return NotFound(new ApiResponse(404));
             return _mapper.Map<ProcessRequest, ProcessRequestToReturnDto>(processRequest);
             
         }
