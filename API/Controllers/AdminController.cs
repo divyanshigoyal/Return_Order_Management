@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
 using Core.Specifications;
+using API.DTOs;
 
 namespace API.Controllers
 {
@@ -26,17 +27,31 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProcessRequest>>> GetAllProcessRequests(){
+        public async Task<ActionResult<IReadOnlyList<ProcessRequestToReturnDto>>> GetAllProcessRequests(){
             var spec = new ProcessRequestWithDefectiveComponentDetail();
             var processRequests = await _requestRepo.ListAsync(spec);
-            return Ok(processRequests);
+            return processRequests.Select(Request => new ProcessRequestToReturnDto{
+                Id = Request.id,
+                UserName = Request.UserName,
+                ContactNumber = Request.ContactNumber,
+                ComponentType = Request.ComponentDetail.ComponentType,
+                ComponentName = Request.ComponentDetail.ComponentName,
+                Quantity = (int)Request.ComponentDetail.Quantity
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProcessRequest>> GetProcessRequest(int id){
+        public async Task<ActionResult<ProcessRequestToReturnDto>> GetProcessRequest(int id){
             var spec = new ProcessRequestWithDefectiveComponentDetail(id);
             var processRequest = await _requestRepo.GetEntityWithSpec(spec);
-            return processRequest;
+            return new ProcessRequestToReturnDto{
+                Id = processRequest.id,
+                UserName = processRequest.UserName,
+                ContactNumber = processRequest.ContactNumber,
+                ComponentType = processRequest.ComponentDetail.ComponentType,
+                ComponentName = processRequest.ComponentDetail.ComponentName,
+                Quantity = (int)processRequest.ComponentDetail.Quantity
+            };
         }
     }
 }
