@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
 using Core.Specifications;
 using API.DTOs;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -18,10 +19,12 @@ namespace API.Controllers
     {
         private readonly IGenericRepository<ProcessRequest> _requestRepo;
         private readonly IGenericRepository<ProcessResponse> _responseRepo;
+        private readonly IMapper _mapper;
 
         public AdminController(IGenericRepository<ProcessRequest> requestRepo,
-         IGenericRepository<ProcessResponse> responseRepo)
+         IGenericRepository<ProcessResponse> responseRepo, IMapper mapper)
         {
+            _mapper = mapper;
             _responseRepo = responseRepo;
             _requestRepo = requestRepo;
         }
@@ -44,14 +47,8 @@ namespace API.Controllers
         public async Task<ActionResult<ProcessRequestToReturnDto>> GetProcessRequest(int id){
             var spec = new ProcessRequestWithDefectiveComponentDetail(id);
             var processRequest = await _requestRepo.GetEntityWithSpec(spec);
-            return new ProcessRequestToReturnDto{
-                Id = processRequest.id,
-                UserName = processRequest.UserName,
-                ContactNumber = processRequest.ContactNumber,
-                ComponentType = processRequest.ComponentDetail.ComponentType,
-                ComponentName = processRequest.ComponentDetail.ComponentName,
-                Quantity = (int)processRequest.ComponentDetail.Quantity
-            };
+            return _mapper.Map<ProcessRequest, ProcessRequestToReturnDto>(processRequest);
+            
         }
     }
 }
