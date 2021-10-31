@@ -25,6 +25,7 @@ namespace API
         {
 
             services.AddScoped<IProcessRequestRepository, ProcessRequestReporsitory>();
+            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddControllers();
             services.AddDbContext<RomDbContext>(x => 
                 x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));

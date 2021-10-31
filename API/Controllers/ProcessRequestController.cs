@@ -10,18 +10,20 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PackageAndDeliveryController : ControllerBase
+    public class ProcessRequestController : ControllerBase
     {
         private readonly IProcessRequestRepository _repo;
-        public PackageAndDeliveryController(IProcessRequestRepository repo)
+        public ProcessRequestController(IProcessRequestRepository repo)
         {
             _repo = repo;
         }
 
-        [HttpGet]
-        public async Task<decimal> GetPackagingDeliveryCharge(int componentTypeId){
-            var processRequests = await _repo.GetProcessRequestsAsync();
-            return 179;
-        }
+        [HttpPost]
+
+        public async Task<ActionResult<ProcessRequest>> AddProcessRequest(ProcessRequest processRequest){
+
+            await _repo.AddProcessRequest(processRequest);
+            return processRequest;
+        }        
     }
 }

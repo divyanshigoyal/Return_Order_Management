@@ -1,3 +1,6 @@
+using System.Threading.Tasks;
+using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,20 +10,20 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ComponentProcessingController : ControllerBase
     {
-        private readonly RomDbContext _context;
-        public ComponentProcessingController(RomDbContext context)
+        private readonly IProcessRequestRepository _repo;
+        public ComponentProcessingController(IProcessRequestRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         [HttpGet]
-        public string ProcessDeatil(){
-            return "ProcessDeatil() called";
+        public async Task<ProcessResponse> ProcessDetail(ProcessRequest processRequest){
+            return await _repo.ProcessDetail(processRequest);
         }
 
         [HttpPost]
-        public string CompleteProcessing(){
-            return "CompleteProcessing() called";
+        public string CompleteProcessing(Billing billing){
+            return "Completed!";
         }
     }
 }

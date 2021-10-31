@@ -7,6 +7,7 @@ using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
+using Core.Specifications;
 
 namespace API.Controllers
 {
@@ -14,21 +15,27 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
-        private readonly IProcessRequestRepository _repo;
-        public AdminController(IProcessRequestRepository repo)
+        private readonly IGenericRepository<ProcessRequest> _requestRepo;
+        private readonly IGenericRepository<ProcessResponse> _responseRepo;
+
+        public AdminController(IGenericRepository<ProcessRequest> requestRepo,
+         IGenericRepository<ProcessResponse> responseRepo)
         {
-            _repo = repo;
+            _responseRepo = responseRepo;
+            _requestRepo = requestRepo;
         }
 
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProcessRequest>>> GetAllProcessRequests(){
-            var processRequests = await _repo.GetProcessRequestsAsync();
+            var spec = new ProcessRequestWithDefectiveComponentDetail();
+            var processRequests = await _requestRepo.ListAsync(spec);
             return Ok(processRequests);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProcessRequest>> GetProcessRequest(int id){
-            var processRequest = await _repo.GetProcessRequestByIdAsync(id);
+            var spec = new ProcessRequestWithDefectiveComponentDetail(id);
+            var processRequest = await _requestRepo.GetEntityWithSpec(spec);
             return processRequest;
         }
     }
