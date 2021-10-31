@@ -33,14 +33,7 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<ProcessRequestToReturnDto>>> GetAllProcessRequests(){
             var spec = new ProcessRequestWithDefectiveComponentDetail();
             var processRequests = await _requestRepo.ListAsync(spec);
-            return processRequests.Select(Request => new ProcessRequestToReturnDto{
-                Id = Request.id,
-                UserName = Request.UserName,
-                ContactNumber = Request.ContactNumber,
-                ComponentType = Request.ComponentDetail.ComponentType,
-                ComponentName = Request.ComponentDetail.ComponentName,
-                Quantity = (int)Request.ComponentDetail.Quantity
-            }).ToList();
+            return Ok(_mapper.Map<IReadOnlyList<ProcessRequest>, IReadOnlyList<ProcessRequestToReturnDto>>(processRequests));
         }
 
         [HttpGet("{id}")]
