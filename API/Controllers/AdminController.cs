@@ -12,6 +12,7 @@ using API.DTOs;
 using AutoMapper;
 using API.Errors;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -28,14 +29,14 @@ namespace API.Controllers
             _responseRepo = responseRepo;
             _requestRepo = requestRepo;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProcessRequestToReturnDto>>> GetAllProcessRequests(){
             var spec = new ProcessRequestWithDefectiveComponentDetail();
             var processRequests = await _requestRepo.ListAsync(spec);
             return Ok(_mapper.Map<IReadOnlyList<ProcessRequest>, IReadOnlyList<ProcessRequestToReturnDto>>(processRequests));
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse) ,StatusCodes.Status404NotFound)]
