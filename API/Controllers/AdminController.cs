@@ -29,7 +29,7 @@ namespace API.Controllers
             _responseRepo = responseRepo;
             _requestRepo = requestRepo;
         }
-        [Authorize]
+        // [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProcessRequestToReturnDto>>> GetAllProcessRequests(){
             var spec = new ProcessRequestWithDefectiveComponentDetail();
