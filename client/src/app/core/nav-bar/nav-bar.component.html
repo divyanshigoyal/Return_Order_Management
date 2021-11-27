@@ -20,7 +20,9 @@
     <ng-container *ngIf="currentUser$ | async">
       <div class="col-md-3 text-end">
       <p href="#">Welcome <strong>{{(currentUser$ | async).displayName}}</strong></p>
-    </div>
+      <a (click)="logout()" style="cursor: pointer;">Logout</a>
+      </div>
+      
     </ng-container>
 
   </header>
