@@ -17,4 +17,9 @@
         <span *ngIf="controlDir.control.errors?.pattern">Invalid {{label}}</span>
 
     </div>
+    <div class="invalid-feedback d-block" *ngIf="(controlDir && controlDir.control && 
+    !controlDir.control.valid && controlDir.control.dirty)">
+    <span *ngIf="controlDir.control.errors?.emailExists">Email already in use!</span>
+
+</div>
   </div>
