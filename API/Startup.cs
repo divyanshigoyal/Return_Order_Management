@@ -38,9 +38,9 @@ namespace API
             services.AddControllers();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<RomDbContext>(x => 
-                x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
+                x.UseNpgsql(_configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<AppIdentityDbContext>(x => {
-                x.UseSqlite(_configuration.GetConnectionString("IdentityConnection"));
+                x.UseNpgsql(_configuration.GetConnectionString("IdentityConnection"));
             });
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = actionContext =>{
@@ -84,6 +84,7 @@ namespace API
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -96,6 +97,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
