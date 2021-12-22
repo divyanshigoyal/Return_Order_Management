@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Core.Entities;
@@ -14,9 +15,10 @@ namespace Infrastructure.Data
         public static async Task SeedAsync(RomDbContext context, ILoggerFactory loggerFactory){
             try
             {
+                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                  if(!context.DefectiveComponentDetails.Any()){
                      var dataJson = 
-                        File.ReadAllText("../Infrastructure/Data/SeedData/DefectiveComponentDetails.json");
+                        File.ReadAllText(path + @"/Data/SeedData/DefectiveComponentDetails.json");
                     
                     var data = JsonSerializer.Deserialize<List<DefectiveComponentDetail>>(dataJson);
                     foreach (var item in data)
@@ -29,7 +31,7 @@ namespace Infrastructure.Data
             
                  if(!context.ProcessRequests.Any()){
                      var dataJson = 
-                        File.ReadAllText("../Infrastructure/Data/SeedData/ProcessRequest.json");
+                        File.ReadAllText(path + @"/Data/SeedData/ProcessRequest.json");
                     
                     var data = JsonSerializer.Deserialize<List<ProcessRequest>>(dataJson);
                     foreach (var item in data)
