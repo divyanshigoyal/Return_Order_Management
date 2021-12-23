@@ -9,10 +9,11 @@ import { RequestsModule } from './requests/requests.module';
 import { HomeModule } from './home/home.module';
 import { ContactModule } from './contact/contact.module';
 import { AccountModule } from './account/account.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent  
   ],
   imports: [
     BrowserModule,
@@ -23,7 +24,9 @@ import { AccountModule } from './account/account.module';
     RequestsModule,
     HomeModule,
     ContactModule,
-    AccountModule
+    AccountModule,
+    RequestsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
