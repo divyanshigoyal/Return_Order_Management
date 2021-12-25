@@ -11,5 +11,8 @@ namespace Core.Entities
         public decimal PackagingAndDeliveryCharge { get; set; }
         public DateTime DateOfDelivery { get; set; }
 
+        public ProcessRequest ProcessRequest {get; set;}
+        public int ProcessRequestId { get; set; }   
+
     }
 }

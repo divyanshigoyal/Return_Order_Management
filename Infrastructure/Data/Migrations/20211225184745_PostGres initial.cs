@@ -24,21 +24,6 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProcessResponse",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProcessingCharge = table.Column<decimal>(type: "numeric", nullable: false),
-                    PackagingAndDeliveryCharge = table.Column<decimal>(type: "numeric", nullable: false),
-                    DateOfDelivery = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProcessResponse", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProcessRequests",
                 columns: table => new
                 {
@@ -55,6 +40,28 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_ProcessRequests_DefectiveComponentDetails_DefectiveComponen~",
                         column: x => x.DefectiveComponentDetailId,
                         principalTable: "DefectiveComponentDetails",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProcessResponse",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProcessingCharge = table.Column<decimal>(type: "numeric", nullable: false),
+                    PackagingAndDeliveryCharge = table.Column<decimal>(type: "numeric", nullable: false),
+                    DateOfDelivery = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ProcessRequestId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProcessResponse", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ProcessResponse_ProcessRequests_ProcessRequestId",
+                        column: x => x.ProcessRequestId,
+                        principalTable: "ProcessRequests",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -89,6 +96,11 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_ProcessRequests_DefectiveComponentDetailId",
                 table: "ProcessRequests",
                 column: "DefectiveComponentDetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProcessResponse_ProcessRequestId",
+                table: "ProcessResponse",
+                column: "ProcessRequestId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -97,10 +109,10 @@ namespace Infrastructure.Data.Migrations
                 name: "Billings");
 
             migrationBuilder.DropTable(
-                name: "ProcessRequests");
+                name: "ProcessResponse");
 
             migrationBuilder.DropTable(
-                name: "ProcessResponse");
+                name: "ProcessRequests");
 
             migrationBuilder.DropTable(
                 name: "DefectiveComponentDetails");

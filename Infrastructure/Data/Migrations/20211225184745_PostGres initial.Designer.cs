@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(RomDbContext))]
-    [Migration("20211127220716_PostGres initial")]
+    [Migration("20211225184745_PostGres initial")]
     partial class PostGresinitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,10 +101,15 @@ namespace Infrastructure.Data.Migrations
                     b.Property<decimal>("PackagingAndDeliveryCharge")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("ProcessRequestId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("ProcessingCharge")
                         .HasColumnType("numeric");
 
                     b.HasKey("id");
+
+                    b.HasIndex("ProcessRequestId");
 
                     b.ToTable("ProcessResponse");
                 });
@@ -129,6 +134,17 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ComponentDetail");
+                });
+
+            modelBuilder.Entity("Core.Entities.ProcessResponse", b =>
+                {
+                    b.HasOne("Core.Entities.ProcessRequest", "ProcessRequest")
+                        .WithMany()
+                        .HasForeignKey("ProcessRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProcessRequest");
                 });
 #pragma warning restore 612, 618
         }

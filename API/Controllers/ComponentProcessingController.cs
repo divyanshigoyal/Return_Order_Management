@@ -14,14 +14,14 @@ namespace API.Controllers
             _repo = repo;
         }
 
-        [HttpGet]
-        public async Task<ProcessResponse> ProcessDetail(ProcessRequest processRequest){
+        [HttpPost]
+        public async Task<ActionResult<ProcessResponse>> ProcessDetail([FromBody]ProcessRequest processRequest){
             return await _repo.ProcessDetail(processRequest);
         }
 
-        [HttpPost]
-        public string CompleteProcessing(Billing billing){
-            return "Completed!";
-        }
+        // [HttpPost]
+        // public string CompleteProcessing(Billing billing){
+        //     return "Completed!";
+        // }
     }
 }
