@@ -47,6 +47,7 @@ namespace Infrastructure.Data
             processResponse.DateOfDelivery = DateTime.UtcNow;
             processResponse.ProcessingCharge = 200;
             await _context.ProcessResponse.AddAsync(processResponse);
+            await _context.SaveChangesAsync();
             return processResponse;
 
         }

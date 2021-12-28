@@ -99,10 +99,15 @@ namespace Infrastructure.Data.Migrations
                     b.Property<decimal>("PackagingAndDeliveryCharge")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("ProcessRequestId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("ProcessingCharge")
                         .HasColumnType("numeric");
 
                     b.HasKey("id");
+
+                    b.HasIndex("ProcessRequestId");
 
                     b.ToTable("ProcessResponse");
                 });
@@ -127,6 +132,17 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ComponentDetail");
+                });
+
+            modelBuilder.Entity("Core.Entities.ProcessResponse", b =>
+                {
+                    b.HasOne("Core.Entities.ProcessRequest", "ProcessRequest")
+                        .WithMany()
+                        .HasForeignKey("ProcessRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProcessRequest");
                 });
 #pragma warning restore 612, 618
         }
